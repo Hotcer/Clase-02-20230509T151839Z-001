@@ -1,0 +1,36 @@
+mport os
+
+nombre_archivo = 'Emisiones_CO2.csv'  # Reemplaza con el nombre de tu archivo CSV
+ruta_archivo = os.path.join(os.getcwd(), nombre_archivo)
+
+icc_emisiones = {
+    'cod_pais': [],
+    'nom_pais': [],
+    'region': [],
+    'anio': [],
+    'co2': [],
+    'co2_percapita': []
+}
+
+with open(ruta_archivo, 'r') as archivo_csv:
+    # Saltar la primera fila (encabezado)
+    archivo_csv.readline()
+
+    for linea in archivo_csv:
+        # Eliminar el salto de línea y dividir la línea por comas
+        fila = linea.rstrip('\n').split(',')
+
+        # Verificar que la fila tenga al menos 6 elementos
+        if len(fila) >= 6:
+            # Añadir los datos a la estructura
+            icc_emisiones['cod_pais'].append(fila[0])
+            icc_emisiones['nom_pais'].append(fila[1])
+            icc_emisiones['region'].append(fila[2])
+            icc_emisiones['anio'].append(int(fila[3]))
+            icc_emisiones['co2'].append(float(fila[4]))
+
+            # Reemplazar coma por punto en el último dato de la columna 'co2_percapita'
+            co2_percapita = fila[5].replace(',', '.')
+            icc_emisiones['co2_percapita'].append(float(co2_percapita))
+        else:
+            print("La fila no tiene suficientes elementos:", fila)
